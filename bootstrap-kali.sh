@@ -38,7 +38,6 @@ install-mozilla-addon https://addons.mozilla.org/firefox/downloads/file/3616824/
 pip install tldr
 DEBIAN_FRONTEND=noninteractive apt-get update -yq && apt-get install -yq \
     zim \
-  && apt-get -yq -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade \
   && apt-get -yq autoremove
 
 # Credentials
