@@ -3,7 +3,6 @@
 NAME = "kali".freeze
 
 Vagrant.configure("2") do |config|
-  config.ssh.forward_agent = true
   config.ssh.forward_x11 = true
 
   config.vm.box = "kalilinux/rolling"
@@ -14,6 +13,7 @@ Vagrant.configure("2") do |config|
     vb.memory = "4096"
     vb.name = NAME
   end
+  config.vm.provision :file, source: "secrets/ssh", destination: "$HOME/.ssh"
   config.vm.provision :shell, path: "bootstrap-kali.sh"
   config.vm.synced_folder "share/", "/share"
 end
