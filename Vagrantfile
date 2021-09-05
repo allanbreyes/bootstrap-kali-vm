@@ -13,7 +13,13 @@ Vagrant.configure("2") do |config|
     vb.memory = "4096"
     vb.name = NAME
   end
-  config.vm.provision :file, source: "secrets/ssh", destination: "$HOME/.ssh"
+  {
+    "dotfiles/profile.sh" => "$HOME/.profile",
+    "secrets/gpg" => "$HOME/.gpg",
+    "secrets/ssh" => "$HOME/.ssh",
+  }.each do |src, dst|
+    config.vm.provision :file, source: src, destination: dst
+  end
   config.vm.provision :shell, path: "bootstrap-kali.sh"
   config.vm.synced_folder "share/", "/share"
 end
