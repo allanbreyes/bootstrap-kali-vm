@@ -32,6 +32,7 @@ fi
 
 # Install packages and updates
 pip install tldr
+python3 -m pip install git+https://github.com/Tib3rius/AutoRecon.git
 DEBIAN_FRONTEND=noninteractive apt-get update -yq && apt-get install -yq \
     zim \
   && apt-get -yq autoremove
