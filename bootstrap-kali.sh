@@ -16,6 +16,13 @@ else
 fi
 echo -e "$pass\n$pass" | passwd $user 2>/dev/null
 
+# File serves
+usermod -aG adm,www-data "$user"
+chown -R www-data:www-data /var/www/html /srv/tftp
+chmod 775 /var/www/html /srv/tftp
+cd /srv && ln -sf /var/www/html && cd -
+echo > /srv/html/index.html
+
 # Add custom preferences and scripts
 store=/usr/local/bin/store
 if [ ! -f "$store" ]; then
