@@ -24,6 +24,7 @@ cd /srv && ln -sf /var/www/html && cd -
 echo > /srv/html/index.html
 
 # Add custom preferences and scripts
+runuser -u "$user" -- touch "/home/$user/.hushlogin"
 store=/usr/local/bin/store
 if [ ! -f "$store" ]; then
   wget -O "$store" https://gist.githubusercontent.com/allanbreyes/f4f301df10476083efc46ecc1cdf7a6c/raw/c88ea3693d035cb7e816b29d390cdfd39cf0cc3b/store.py
@@ -32,7 +33,9 @@ fi
 
 # Install packages and updates
 pip install tldr
-python3 -m pip install git+https://github.com/Tib3rius/AutoRecon.git
+if [ -f "/usr/local/bin/autorecon" ]; then
+  python3 -m pip install git+https://github.com/Tib3rius/AutoRecon.git
+fi
 DEBIAN_FRONTEND=noninteractive apt-get update -yq && apt-get install -yq \
     zim \
   && apt-get -yq autoremove
