@@ -3,8 +3,6 @@
 NAME = "kali".freeze
 
 Vagrant.configure("2") do |config|
-  config.ssh.forward_x11 = true
-
   config.vm.box = "kalilinux/rolling"
   config.vm.define NAME
   config.vm.provider :virtualbox do |vb|
