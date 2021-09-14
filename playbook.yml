@@ -86,10 +86,6 @@
         repo: https://github.com/pwndbg/pwndbg
         dest: /usr/src/pwndbg
         update: no
-    - name: Install pwndbg
-      command:
-        cmd: /usr/src/pwndbg/setup.sh
-        creates: "/home/{{ username }}/.gdbinit"
     - name: Unzip rockyou
       command:
         cmd: gzip -d /usr/share/wordlists/rockyou.txt.gz
