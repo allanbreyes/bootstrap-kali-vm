@@ -67,12 +67,6 @@
         url: https://gist.githubusercontent.com/allanbreyes/f4f301df10476083efc46ecc1cdf7a6c/raw/c88ea3693d035cb7e816b29d390cdfd39cf0cc3b/store.py
         dest: /usr/local/bin/store
         mode: "0555"
-    - name: Install pip packages
-      pip:
-        name:
-          - pwntools
-          - tldr
-        executable: /usr/bin/pip3
     - name: Install AutoRecon
       command:
         cmd: python3 -m pip install git+https://github.com/Tib3rius/AutoRecon.git
@@ -80,7 +74,39 @@
     - name: Install apt packages
       apt:
         pkg:
+          - bloodhound
+          - docker.io
+          - ghidra
+          - gobuster
+          - golang
+          - jq
+          - payloadsallthethings
+          - rlwrap
+          - ufw
+          - xclip
+          - xsel
           - zim
+    - name: Autoremove unused packages
+      apt:
+        autoremove: true
+    - name: Clean apt cache
+      apt:
+        autoclean: true
+    - name: Install pip packages (Python 3)
+      pip:
+        name:
+          - pwntools
+          - ropper
+          - tldr
+        executable: /usr/bin/pip3
+        state: latest
+    - name: Install ruby packages
+      community.general.gem:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - winrm
+        - evil-winrm
     - name: Clone pwndbg
       git:
         repo: https://github.com/pwndbg/pwndbg
