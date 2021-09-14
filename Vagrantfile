@@ -6,18 +6,18 @@ Vagrant.configure("2") do |config|
   config.vm.box = "kalilinux/rolling"
   config.vm.define NAME
   config.vm.provider :virtualbox do |vb|
+    vb.cpus = 2
     vb.gui = false
     vb.linked_clone = true
-    vb.memory = "4096"
+    vb.memory = "8192"
     vb.name = NAME
   end
-  {
-    "dotfiles/profile.sh" => "$HOME/.profile",
-    "secrets/gpg" => "$HOME/.gpg",
-    "secrets/ssh" => "$HOME/.ssh",
-  }.each do |src, dst|
-    config.vm.provision :file, source: src, destination: dst
+  config.vm.provision "ansible" do |ab|
+    ab.become = true
+    ab.playbook = "playbook.yml"
+    ab.raw_arguments = [ "-e", "ansible_python_interpreter=/usr/bin/python3" ]
+    ab.verbose = true
   end
-  config.vm.provision :shell, path: "bootstrap-kali.sh"
+  # config.vm.provision :shell, path: "bootstrap-kali.sh"
   config.vm.synced_folder "share/", "/share"
 end

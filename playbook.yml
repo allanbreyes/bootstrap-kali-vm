@@ -1,0 +1,96 @@
+---
+- hosts: kali
+  become: true
+  vars:
+    username: vagrant
+    passhash: "{{ lookup('file', './secrets/pass.txt') }}"
+    user_owned: &USER_OWNED
+      owner: "{{ username }}"
+      group: "{{ username }}"
+    www_owned: &WWW_OWNED
+      owner: www-data
+      group: www-data
+  tasks:
+    - name: Configure user {{ username }}
+      user:
+        name: "{{ username }}"
+        groups:
+          - adm
+          - audio
+          - bluetooth
+          - cdrom
+          - dialout
+          - dip
+          - floppy
+          - kaboxer
+          - netdev
+          - plugdev
+          - scanner
+          - sudo
+          - vagrant
+          - video
+          - wireshark
+          - www-data
+        password: "{{ passhash }}"
+        update_password: always
+    - name: Set ownership for HTTP serve
+      file:
+        <<: *WWW_OWNED
+        path: /var/www/html
+        mode: "0775"
+    - name: Set ownership for FTP serve
+      file:
+        <<: *WWW_OWNED
+        path: /srv/tftp
+        mode: "0775"
+    - name: Symlink HTTP serve
+      file:
+        src: /var/www/html
+        dest: /srv/http
+        state: link
+    - name: Hush login
+      copy:
+        <<: *USER_OWNED
+        dest: "/home/{{ username }}/.hushlogin"
+        content: ""
+    - name: Add SSH keys
+      copy:
+        <<: *USER_OWNED
+        src: "./secrets/{{ item }}"
+        dest: "/home/{{ username }}/.ssh/{{ item }}"
+        mode: "0400"
+      loop:
+        - id_ed25519
+        - id_ed25519.pub
+    - name: Get store script
+      get_url:
+        url: https://gist.githubusercontent.com/allanbreyes/f4f301df10476083efc46ecc1cdf7a6c/raw/c88ea3693d035cb7e816b29d390cdfd39cf0cc3b/store.py
+        dest: /usr/local/bin/store
+        mode: "0555"
+    - name: Install pip packages
+      pip:
+        name:
+          - pwntools
+          - tldr
+        executable: /usr/bin/pip3
+    - name: Install AutoRecon
+      command:
+        cmd: python3 -m pip install git+https://github.com/Tib3rius/AutoRecon.git
+        creates: /usr/local/bin/autorecon
+    - name: Install apt packages
+      apt:
+        pkg:
+          - zim
+    - name: Clone pwndbg
+      git:
+        repo: https://github.com/pwndbg/pwndbg
+        dest: /usr/src/pwndbg
+        update: no
+    - name: Install pwndbg
+      command:
+        cmd: /usr/src/pwndbg/setup.sh
+        creates: "/home/{{ username }}/.gdbinit"
+    - name: Unzip rockyou
+      command:
+        cmd: gzip -d /usr/share/wordlists/rockyou.txt.gz
+        creates: /usr/share/wordlists/rockyou.txt
