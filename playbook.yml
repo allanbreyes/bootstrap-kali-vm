@@ -48,6 +48,31 @@
         src: /var/www/html
         dest: /srv/http
         state: link
+    - name: Add dotfiles
+      copy:
+        <<: *USER_OWNED
+        src: "./dotfiles/{{ item.key }}"
+        dest: "/home/{{ username }}/{{ item.value }}"
+      with_dict:
+        profile.sh: .profile
+        user-dirs.dirs: .config/user-dirs.dirs
+    - name: Remove unwanted directories
+      file:
+        path: "/home/{{ username }}/{{ item }}"
+        state: absent
+      loop:
+        - Desktop
+        - Documents
+        - Music
+        - Pictures
+        - Public
+        - Templates
+        - Videos
+    - name: Symlink Desktop to share
+      file:
+        src: /share
+        dest: "/home/{{ username }}/Desktop"
+        state: link
     - name: Hush login
       copy:
         <<: *USER_OWNED
@@ -116,3 +141,4 @@
       command:
         cmd: gzip -d /usr/share/wordlists/rockyou.txt.gz
         creates: /usr/share/wordlists/rockyou.txt
+
