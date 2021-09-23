@@ -64,6 +64,7 @@
       with_dict:
         profile.sh: .profile
         user-dirs.dirs: .config/user-dirs.dirs
+        tmux.conf: .tmux.conf
     - name: Remove unwanted directories
       file:
         path: "/home/{{ username }}/{{ item }}"
@@ -98,7 +99,7 @@
     - name: Get store script
       get_url:
         url: https://gist.githubusercontent.com/allanbreyes/f4f301df10476083efc46ecc1cdf7a6c/raw/c88ea3693d035cb7e816b29d390cdfd39cf0cc3b/store.py
-        dest: /usr/local/bin/store
+        dest: /usr/local/bin/kv
         mode: "0555"
     - name: Install AutoRecon
       command:
@@ -108,14 +109,36 @@
       apt:
         pkg:
           - bloodhound
+          - curl
           - docker.io
+          - enum4linux
+          - feroxbuster
           - ghidra
           - gobuster
           - golang
+          - impacket-scripts
           - jq
+          - nbtscan
+          - nikto
+          - nmap
+          - onesixtyone
+          - oscanner
           - payloadsallthethings
+          - rbenv
+          - redis-tools
           - rlwrap
+          - ruby-build
+          - seclists
+          - sipvicious
+          - smbclient
+          - smbmap
+          - snmp
+          - sslscan
+          - tnscmd10g
           - ufw
+          - whatweb
+          - wkhtmltopdf
+          - wpscan
           - xclip
           - xsel
           - zim
@@ -149,4 +172,3 @@
       command:
         cmd: gzip -d /usr/share/wordlists/rockyou.txt.gz
         creates: /usr/share/wordlists/rockyou.txt
-
