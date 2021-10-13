@@ -21,6 +21,7 @@
           - cdrom
           - dialout
           - dip
+          - docker
           - floppy
           - kaboxer
           - netdev
@@ -54,17 +55,32 @@
         url: "{{ item.value }}"
         dest: "{{ item.key }}"
       with_dict:
+        /srv/http/les.sh: https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh
         /srv/http/linpeas.sh: https://raw.githubusercontent.com/carlospolop/PEASS-ng/master/linPEAS/linpeas.sh
+        /srv/http/lse.sh: https://raw.githubusercontent.com/diego-treitos/linux-smart-enumeration/master/lse.sh
         /srv/http/winpeas.bat: https://raw.githubusercontent.com/carlospolop/PEASS-ng/master/winPEAS/winPEASbat/winPEAS.bat
-    - name: Add dotfiles
-      copy:
+    - name: Clone useful repos
+      git:
+        repo: "{{ item.value }}"
+        dest: "{{ item.key }}"
+        update: no
+      with_dict:
+        /usr/share/static-binaries: https://github.com/andrew-d/static-binaries.git
+    - name: Add files
+      copy: &COPY_DOTFILES
         <<: *USER_OWNED
-        src: "./dotfiles/{{ item.key }}"
+        src: "./files/{{ item.key }}"
         dest: "/home/{{ username }}/{{ item.value }}"
       with_dict:
+        pixel.png: ../../srv/http/pixel.png
         profile.sh: .profile
-        user-dirs.dirs: .config/user-dirs.dirs
         tmux.conf: .tmux.conf
+        user-dirs.dirs: .config/user-dirs.dirs
+        zshrc.sh: .zshrc
+    - name: Add templated dotfiles
+      template: *COPY_DOTFILES
+      with_dict:
+        gitconfig.ini: .gitconfig
     - name: Remove unwanted directories
       file:
         path: "/home/{{ username }}/{{ item }}"
@@ -108,16 +124,23 @@
     - name: Install apt packages
       apt:
         pkg:
+          - beef-xss
           - bloodhound
           - curl
           - docker.io
           - enum4linux
+          - exploitdb-papers
           - feroxbuster
+          - fzf
+          - gcc-multilib
           - ghidra
           - gobuster
           - golang
           - impacket-scripts
           - jq
+          - kerberoast
+          - ltrace
+          - masscan
           - nbtscan
           - nikto
           - nmap
@@ -130,12 +153,15 @@
           - ruby-build
           - seclists
           - sipvicious
+          - samba
           - smbclient
           - smbmap
           - snmp
           - sslscan
+          - strace
           - tnscmd10g
           - ufw
+          - vsftpd
           - whatweb
           - wkhtmltopdf
           - wpscan

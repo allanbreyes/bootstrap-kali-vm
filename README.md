@@ -13,6 +13,10 @@ Update with `vagrant up --provision`.
 
 - [ ] Install pwndbg via `/usr/src/pwndbg/setup.sh`.
 - [ ] Import GPG key and update git config.
+- [ ] Clone notebook.
+- [ ] Install:
+  - sshpass
+  - bzip2
 
 ## Credits
 
