@@ -16,7 +16,8 @@ WORDCHARS=${WORDCHARS//\/} # Don't consider certain characters part of the word
 PROMPT_EOL_MARK=""
 
 # configure key keybindings
-bindkey -e                                        # emacs key bindings
+#bindkey -e                                        # emacs key bindings
+set -o vi                                         # vi keys binding
 bindkey ' ' magic-space                           # do history expansion on space
 bindkey '^[[3;5~' kill-word                       # ctrl + Supr
 bindkey '^[[3~' delete-char                       # delete
@@ -251,7 +252,22 @@ if [ -f /etc/zsh_command_not_found ]; then
     . /etc/zsh_command_not_found
 fi
 
-# rbenv
+# fzf completion
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/doc/fzf/examples/completion.zsh
+
+# useful functions
+me () {
+  ifconfig | grep tun0 -A 7 | grep 'inet ' | awk '{print $2}'
+}
+
+# pyenv/rbenv
+PYENV_ROOT=$HOME/.pyenv
+export PATH="$HOME/Notebook/pwk/bin:$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
+pyenv() {
+  eval "$(command pyenv init -)"
+  pyenv "$@"
+}
 rbenv() {
   eval "$(command rbenv init -)"
   rbenv "$@"
