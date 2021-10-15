@@ -141,6 +141,7 @@
           - kerberoast
           - ltrace
           - masscan
+          - mingw-w64
           - nbtscan
           - nikto
           - nmap
@@ -163,6 +164,7 @@
           - ufw
           - vsftpd
           - whatweb
+          - wine
           - wkhtmltopdf
           - wpscan
           - xclip
