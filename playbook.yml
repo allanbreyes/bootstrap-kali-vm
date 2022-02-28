@@ -11,6 +11,59 @@
       owner: www-data
       group: www-data
   tasks:
+    - name: Install apt packages
+      apt:
+        pkg:
+          - beef-xss
+          - bloodhound
+          - curl
+          - docker.io
+          - enum4linux
+          - exploitdb-papers
+          - feroxbuster
+          - fzf
+          - gcc-multilib
+          - ghidra
+          - gobuster
+          - golang
+          - impacket-scripts
+          - jq
+          - kerberoast
+          - ltrace
+          - masscan
+          - mingw-w64
+          - nbtscan
+          - nikto
+          - nmap
+          - onesixtyone
+          - oscanner
+          - payloadsallthethings
+          - rbenv
+          - redis-tools
+          - rlwrap
+          - ruby-build
+          - seclists
+          - sipvicious
+          - samba
+          - smbclient
+          - smbmap
+          - snmp
+          - sslscan
+          - strace
+          - tnscmd10g
+          - ufw
+          - vsftpd
+          - whatweb
+          - wine
+          - wkhtmltopdf
+          - wpscan
+          - xclip
+          - xsel
+          - zim
+        update_cache: true
+    - name: Autoremove unused packages
+      apt:
+        autoremove: true
     - name: Configure user {{ username }}
       user:
         name: "{{ username }}"
@@ -56,7 +109,7 @@
         dest: "{{ item.key }}"
       with_dict:
         /srv/http/les.sh: https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh
-        /srv/http/linpeas.sh: https://raw.githubusercontent.com/carlospolop/PEASS-ng/master/linPEAS/linpeas.sh
+        /srv/http/linpeas.sh: https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh
         /srv/http/lse.sh: https://raw.githubusercontent.com/diego-treitos/linux-smart-enumeration/master/lse.sh
         /srv/http/winpeas.bat: https://raw.githubusercontent.com/carlospolop/PEASS-ng/master/winPEAS/winPEASbat/winPEAS.bat
     - name: Clone useful repos
@@ -112,67 +165,15 @@
       loop:
         - id_ed25519
         - id_ed25519.pub
-    - name: Get store script
-      get_url:
-        url: https://gist.githubusercontent.com/allanbreyes/f4f301df10476083efc46ecc1cdf7a6c/raw/c88ea3693d035cb7e816b29d390cdfd39cf0cc3b/store.py
-        dest: /usr/local/bin/kv
-        mode: "0555"
+    - name: Install go packages
+      command:
+        cmd: "go install {{ item }}"
+      loop:
+        - github.com/allanbreyes/kv@latest
     - name: Install AutoRecon
       command:
         cmd: python3 -m pip install git+https://github.com/Tib3rius/AutoRecon.git
         creates: /usr/local/bin/autorecon
-    - name: Install apt packages
-      apt:
-        pkg:
-          - beef-xss
-          - bloodhound
-          - curl
-          - docker.io
-          - enum4linux
-          - exploitdb-papers
-          - feroxbuster
-          - fzf
-          - gcc-multilib
-          - ghidra
-          - gobuster
-          - golang
-          - impacket-scripts
-          - jq
-          - kerberoast
-          - ltrace
-          - masscan
-          - mingw-w64
-          - nbtscan
-          - nikto
-          - nmap
-          - onesixtyone
-          - oscanner
-          - payloadsallthethings
-          - rbenv
-          - redis-tools
-          - rlwrap
-          - ruby-build
-          - seclists
-          - sipvicious
-          - samba
-          - smbclient
-          - smbmap
-          - snmp
-          - sslscan
-          - strace
-          - tnscmd10g
-          - ufw
-          - vsftpd
-          - whatweb
-          - wine
-          - wkhtmltopdf
-          - wpscan
-          - xclip
-          - xsel
-          - zim
-    - name: Autoremove unused packages
-      apt:
-        autoremove: true
     - name: Clean apt cache
       apt:
         autoclean: true
