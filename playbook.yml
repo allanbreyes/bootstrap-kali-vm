@@ -129,6 +129,7 @@
         profile.sh: .profile
         tmux.conf: .tmux.conf
         user-dirs.dirs: .config/user-dirs.dirs
+        user-dirs.conf: .config/user-dirs.conf
         zshrc.sh: .zshrc
     - name: Add templated dotfiles
       template: *COPY_DOTFILES
