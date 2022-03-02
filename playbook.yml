@@ -127,6 +127,7 @@
         src: "./files/{{ item.key }}"
         dest: "/home/{{ username }}/{{ item.value }}"
       with_dict:
+        bookmarks.txt: .config/gtk-3.0/bookmarks
         pixel.png: ../../srv/http/pixel.png
         profile.sh: .profile
         tmux.conf: .tmux.conf

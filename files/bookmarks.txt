@@ -1,0 +1,3 @@
+file:///home/vagrant/Downloads
+file:///srv/http
+file:///srv/ftp
