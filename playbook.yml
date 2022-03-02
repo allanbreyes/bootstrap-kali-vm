@@ -16,6 +16,7 @@
         pkg:
           - beef-xss
           - bloodhound
+          - bzip2
           - curl
           - docker.io
           - enum4linux
@@ -49,6 +50,7 @@
           - smbclient
           - smbmap
           - snmp
+          - sshpass
           - sslscan
           - strace
           - tnscmd10g
