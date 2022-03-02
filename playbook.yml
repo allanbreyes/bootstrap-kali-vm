@@ -36,6 +36,7 @@
           - nikto
           - nmap
           - onesixtyone
+          - openresolv
           - oscanner
           - payloadsallthethings
           - rbenv
@@ -55,6 +56,7 @@
           - vsftpd
           - whatweb
           - wine
+          - wireguard
           - wkhtmltopdf
           - wpscan
           - xclip
