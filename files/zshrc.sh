@@ -274,5 +274,5 @@ rbenv() {
 }
 
 # modern tools
-alias cat='bat'
+alias cat='batcat'
 alias ls='exa'
