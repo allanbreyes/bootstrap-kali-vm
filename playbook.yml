@@ -125,6 +125,13 @@
         update: no
       with_dict:
         /usr/share/static-binaries: https://github.com/andrew-d/static-binaries.git
+    - name: Add directories
+      file:
+        <<: *USER_OWNED
+        path: "/home/{{ username }}/{{ item }}"
+        state: directory
+      loop:
+        - .config/gtk-3.0
     - name: Add files
       copy: &COPY_DOTFILES
         <<: *USER_OWNED
