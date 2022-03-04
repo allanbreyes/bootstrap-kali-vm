@@ -14,12 +14,14 @@
     - name: Install apt packages
       apt:
         pkg:
+          - bat
           - beef-xss
           - bloodhound
           - bzip2
           - curl
           - docker.io
           - enum4linux
+          - exa
           - exploitdb-papers
           - feroxbuster
           - fzf

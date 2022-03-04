@@ -272,3 +272,7 @@ rbenv() {
   eval "$(command rbenv init -)"
   rbenv "$@"
 }
+
+# modern tools
+alias cat='bat'
+alias ls='exa'
